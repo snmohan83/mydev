@@ -33,7 +33,7 @@ networks:
   # Lima can manage the socket_vmnet daemon for networks defined in $LIMA_HOME/_config/networks.yaml automatically.
   # The socket_vmnet binary must be installed into a secure location only alterable by the admin.
   # The same applies to vde_switch and vde_vmnet for the deprecated VDE mode.
-  - lima: shared
+  - lima: bridged
   #   # MAC address of the instance; lima will pick one based on the instance name,
   #   # so DHCP assigned ip addresses should remain constant over instance restarts.
   #   macAddress: ""
