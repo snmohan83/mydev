@@ -1,0 +1,41 @@
+arch: "x86_64"
+# arch: "aarch64"
+
+images:
+  - location: "https://cloud-images.ubuntu.com/releases/22.04/release-20230302/ubuntu-22.04-server-cloudimg-amd64.img"
+    arch: "x86_64"
+
+# Disable mounts and containerd, otherwise booting up may timeout if the host is slow
+mountType: "reverse-sshfs"
+mounts:
+- location: "~"
+  writable: true
+  sshfs:
+    # Enabling the SSHFS cache will increase performance of the mounted filesystem, at
+    # the cost of potentially not reflecting changes made on the host in a timely manner.
+    # Warning: It looks like PHP filesystem access does not work correctly when
+    # the cache is disabled.
+    # Builtin default: true
+    cache: null
+    # SSHFS has an optional flag called 'follow_symlinks'. This allows mounts
+    # to be properly resolved in the guest os and allow for access to the
+    # contents of the symlink. As a result, symlinked files & folders on the Host
+    # system will look and feel like regular files directories in the Guest OS.
+    # Builtin default: false
+    followSymlinks: null
+    # SFTP driver, "builtin" or "openssh-sftp-server". "openssh-sftp-server" is recommended.
+    # Builtin default: "openssh-sftp-server" if OpenSSH SFTP Server binary is found, otherwise "builtin"
+    sftpDriver: null
+containerd:
+  system: false
+  user: false
+networks:
+  # Lima can manage the socket_vmnet daemon for networks defined in $LIMA_HOME/_config/networks.yaml automatically.
+  # The socket_vmnet binary must be installed into a secure location only alterable by the admin.
+  # The same applies to vde_switch and vde_vmnet for the deprecated VDE mode.
+  - lima: shared
+  #   # MAC address of the instance; lima will pick one based on the instance name,
+  #   # so DHCP assigned ip addresses should remain constant over instance restarts.
+  #   macAddress: ""
+  #   # Interface name, defaults to "lima0", "lima1", etc.
+  #   interface: ""
